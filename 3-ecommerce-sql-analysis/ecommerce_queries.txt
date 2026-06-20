@@ -1,0 +1,48 @@
+-- E-Commerce Sales Analysis
+-- Author: Michelle
+-- Dataset: Messy E-Commerce Sales Dataset (Kaggle)
+
+-- Query 1: All Data
+SELECT * FROM ecommerce;
+
+-- Query 2: Sales by Category
+SELECT Category, 
+       SUM(Total) AS Total_Sales
+FROM ecommerce
+GROUP BY Category
+ORDER BY Total_Sales DESC;
+
+-- Query 3: Most Returned Products
+SELECT Product,
+       COUNT(Order_ID) AS Return_Count
+FROM ecommerce
+WHERE Status = 'Returned'
+GROUP BY Product
+ORDER BY Return_Count DESC;
+
+-- Query 4: Orders by Status
+SELECT Status,
+       COUNT(Order_ID) AS Order_Count
+FROM ecommerce
+GROUP BY Status
+ORDER BY Order_Count DESC;
+
+-- Query 5: Monthly Sales Trend
+SELECT substr(Order_Date, 4, 7) AS Month,
+       SUM(Total) AS Monthly_Sales
+FROM ecommerce
+GROUP BY Month
+ORDER BY substr(Order_Date, 7, 4), 
+         substr(Order_Date, 4, 2);
+
+-- Query 6: Order Value Segments
+SELECT 
+    CASE 
+        WHEN Total < 500 THEN 'Low Value'
+        WHEN Total < 1500 THEN 'Mid Value'
+        ELSE 'High Value'
+    END AS Order_Value,
+    COUNT(Order_ID) AS Order_Count
+FROM ecommerce
+GROUP BY Order_Value
+ORDER BY Order_Count DESC;
